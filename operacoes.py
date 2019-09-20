@@ -12,20 +12,13 @@ print('Vermelho:', r, 'Verde:', g, 'Azul:', b)
 
 
 def img_normal():
+
     # Leitura da imagem com a função imread()
     imagem = cv2.imread('entrada.pgm')
-
-    print('Largura em pixels: ', end='')
-    print(imagem.shape[1])  # largura da imagem
-    print('Altura em pixels: ', end='')
-    print(imagem.shape[0])  # altura da imagem
-    print('Qtde de canais: ', end='')
-    print(imagem.shape[2])
     cv2.imwrite("saida.jpg", imagem)
     # Mostra a imagem com a função imshow
     cv2.imshow("Amostra", imagem)
     cv2.waitKey(0)  # espera pressionar qualquer tecla
-    # Salvar a imagem no disco com função imwrite()
 
 def texto():
 
@@ -230,3 +223,90 @@ def reconhecimento():
     cv2.imshow("Resultado", imgC2)
     cv2.waitKey(0)
     cv2.imwrite("saida.jpg", img)'''
+
+def colorir():
+
+    imagem = cv2.imread('entrada.pgm')
+    for y in range(0, imagem.shape[0]):
+        for x in range(0, imagem.shape[1]):
+            imagem[y, x] = (255, 0, 0)
+    cv2.imwrite("saida.jpg", imagem)
+    cv2.imshow("Imagem modificada", imagem)
+
+def difusao():
+
+    imagem = cv2.imread('entrada.pgm')
+    for y in range(0, imagem.shape[0], 1):  # percorre as linhas
+        for x in range(0, imagem.shape[1], 1):  # percorre as colunas
+            imagem[y, x] = (0, (x * y) % 256, 0)
+    cv2.imwrite("saida.jpg", imagem)
+    cv2.imshow("Imagem modificada", imagem)
+    cv2.waitKey(0)
+
+def pontos():
+
+    imagem = cv2.imread('entrada.pgm')
+    for y in range(0, imagem.shape[0], 10):  # percorre linhas
+        for x in range(0, imagem.shape[1], 10):  # percorre colunas
+            imagem[y:y + 5, x: x + 5] = (0, 255, 255)
+    cv2.imwrite("saida.jpg", imagem)
+    cv2.imshow("Imagem modificada", imagem)
+    cv2.waitKey(0)
+
+def fatiar():
+
+    imagem = cv2.imread('entrada.pgm')
+    recorte = imagem[100:200, 100:200]
+    cv2.imshow("Recorte da imagem", recorte)
+    cv2.imwrite("saida.jpg", recorte)  # salva no disco
+
+def filtro_cor():
+
+    img = cv2.imread('entrada.pgm')
+    (canalAzul, canalVerde, canalVermelho) = cv2.split(img)
+    zeros = np.zeros(img.shape[:2], dtype="uint8")
+    cv2.imwrite("saida.jpg", zeros)
+    cv2.imshow("Vermelho", cv2.merge([zeros, zeros,
+                                      canalVermelho]))
+    cv2.imshow("Verde", cv2.merge([zeros, canalVerde, zeros]))
+    cv2.imshow("Azul", cv2.merge([canalAzul, zeros, zeros]))
+    #cv2.imshow("Original", img)
+    cv2.waitKey(0)
+
+def blur():
+
+    img = cv2.imread('entrada.pgm')
+    img = img[::2, ::2]  # Diminui a imagem
+    suave = np.vstack([
+        np.hstack([img, cv2.blur(img, (3, 3))]),
+        #np.hstack([cv2.blur(img, (5, 5)), cv2.blur(img, (7, 7))]),
+        np.hstack([cv2.blur(img, (9, 9)), cv2.blur(img, (11, 11))]),
+    ])
+    cv2.imwrite("saida.jpg", suave)
+    cv2.imshow("Imagens suavisadas. Blur", suave)
+    cv2.waitKey(0)
+
+def analize():
+
+    # Leitura da imagem com a função imread()
+    imagem = cv2.imread('entrada.jpg')
+    print('Largura em pixels: ', end='')
+    print(imagem.shape[1])  # largura da imagem
+    print('Altura em pixels: ', end='')
+    print(imagem.shape[0])  # altura da imagem
+    print('Qtde de canais: ', end='')
+    print(imagem.shape[2])
+    # Mostra a imagem com a função imshow
+    cv2.imshow("Original", imagem)
+    cv2.waitKey(0)  # espera pressionar qualquer tecla
+    # Salvar a imagem no disco com função imwrite()
+    cv2.imwrite("saida.jpg", imagem)
+
+def aterar_cor():
+
+    imagem = cv2.imread('entrada.jpg')
+    for y in range(0, imagem.shape[0]):  # percorre linhas
+        for x in range(0, imagem.shape[1]):  # percorre colunas
+            imagem[y, x] = (x % 256, y % 256, x % 256)
+    cv2.imshow("Imagem modificada", imagem)
+    cv2.waitKey(0)
